@@ -12,7 +12,7 @@ export default function ProductTile({ imgUrl, writeQty, deleteButton }) {
     if (deleteButton) {
       return (
         <View>
-          <TouchableOpacity style={styles.ItemDeleteButton}>
+          <TouchableOpacity style={styles.ItemDeleteButton} onPress>
             <Ionicons name="trash" size={20} color="black" />
           </TouchableOpacity>
         </View>

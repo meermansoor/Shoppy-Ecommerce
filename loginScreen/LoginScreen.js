@@ -6,14 +6,43 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { SignIn } from "../utils/auth";
 
 function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+  
+    try {
+      setIsLoading(true);
+      const response = await SignIn(email, password);
+  
+      if (response.idToken) {
+        navigation.replace('BottomTab');
+        setIsLoggedIn(true);
+      } else {
+        Alert.alert('Error', response.message || 'Login failed');
+      }
+  
+    } catch (error) {
+      Alert.alert('Error', error.message || 'Failed to login');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
 
   return (
     <View style={styles.container}>
@@ -32,6 +61,8 @@ function LoginScreen({ navigation }) {
           placeholderTextColor="#757575"
           value={email}
           onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
       </View>
 
@@ -58,8 +89,12 @@ function LoginScreen({ navigation }) {
         <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.replace('BottomTab')}>  
-        <Text style={styles.buttonText}>Login</Text>
+      <TouchableOpacity 
+        style={[styles.button, isLoading && styles.buttonDisabled]}
+        onPress={handleLogin}
+        disabled={isLoading}
+      >  
+        <Text style={styles.buttonText}>{isLoading ? 'Logging in...' : 'Login'}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.googleButton}>
@@ -124,6 +159,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 8,
+  },
+  buttonDisabled: {
+    backgroundColor: '#93A3E8',
   },
   buttonText:{
     color: 'white',

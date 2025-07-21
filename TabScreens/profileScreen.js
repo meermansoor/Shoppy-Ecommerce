@@ -7,7 +7,6 @@ import {
   ScrollView,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import products from "../data/productData";
 import ProductTile from "../components/productTile";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";

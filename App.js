@@ -131,7 +131,7 @@ export default function App() {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName="SplashScreen"
+        initialRouteName="SignUp"
       >
         <Stack.Screen name="BottomTab" component={BottomTabNavigation} 
         options={
